@@ -1,0 +1,47 @@
+name: sunflower-test
+team: ops
+project: sunflower
+email: sgulseth@gmail.com
+ports:
+  name: http
+  port: 80
+  protocol: tcp
+  healthcheck:
+    enabled: true
+  expose:
+    enabled: true
+    tls: true
+slack:
+  channel: #deploy-test-chan
+build:
+  args: ''
+branch:
+  master:
+    - environment: staging
+      strategy: release
+      clusters:
+        - k8s-01
+      envVars:
+        NODE_ENV: staging
+      resources:
+        cpus: 0.1
+        memory: 128
+    - environment: production
+      strategy: promote
+      clusters:
+        - k8s-01
+      envVars:
+        NODE_ENV: production
+      resources:
+        cpus: 1.0
+        memory: 128
+pr:
+  - environment: feature
+    strategy: promote
+    clusters:
+      - k8s-01
+    envVars:
+      NODE_ENV: staging
+    resources:
+      cpus: 0.1
+      memory: 128
