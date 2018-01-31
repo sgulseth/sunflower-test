@@ -1,0 +1,25 @@
+name: sunflower-test
+team: ops
+meta:
+  project: sunflower
+  email: sgulseth@gmail.com
+  slack:
+    channel: '#deploy-test-chan'
+type: webapp
+lang: nodejs
+app:
+  port: 80
+pipelines:
+  - environment: staging
+    strategy: release
+    env:
+      NODE_ENV: staging
+  - environment: production
+    strategy: promote
+    env:
+      NODE_ENV: production
+  - environment: pr
+    strategy: promote
+    env:
+      NODE_ENV: staging
+
